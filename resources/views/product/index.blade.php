@@ -79,7 +79,7 @@
 <body>
 
 <div class="container">
-    <h2>Product Management</h2>
+    <h2> {{ $title }} Management</h2>
 
     <table>
         <thead>
@@ -87,19 +87,19 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Price</th>
+                <th>Detail</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>iPhone 15 Pro</td>
-                <td>$999</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>MacBook Air M2</td>
-                <td>$1,199</td>
-            </tr>
+            @foreach($products as $product )
+                <tr>
+                    <td>{{ $product['id'] }}</td>
+                    <td>{{ $product['name'] }}</td>
+                    <td>{{ $product['price'] }}</td>
+                    <td><a href="{{ route('product.show', ['id' => $product['id']]) }}">Chi tiết</a></td>
+                </tr>
+                
+            @endforeach
         </tbody>
     </table>
 

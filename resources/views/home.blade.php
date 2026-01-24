@@ -8,7 +8,13 @@
 <body>
     <center>
         <h1>Home</h1>
-        <a href="{{ route('product.index') }}">Product</a>
+        @if (session('success'))
+        <script>
+            alert("{{ session('success') }}");
+        </script>
+    @endif
+        <a href="{{ route('product.index') }}">Product</a><br>
+        <a href="{{ route('login') }}">Login</a>
     </center>
 </body>
 </html>

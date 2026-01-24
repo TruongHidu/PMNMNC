@@ -1,32 +1,26 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
 Route::get('test', function () {
     return response()->json("Hello world");
 });
 
-Route::prefix('product')->name('product.')->group(function () {
-    Route::get('/', function () {
-        return view('product.index');
-    })->name('index');
+Route::prefix('product')->name('product.')->controller(ProductController::class)->group(function () {
 
-    Route::get('/add', function () {
-        return view('product.add');
-    })->name('create');
+    Route::get('/', 'index')->name('index');
 
-    Route::post('/', function (Request $request) {
-        return redirect()->route('product.index');
-    })->name('store');
+    Route::get('/add', 'create')->name('create');
 
-    Route::get('/{id?}', function ($id='123') {
-        return view('product.detail', ['id' => $id]);
-    })->name('show');
+    Route::post('/', 'store')->name('store');
+
+    Route::get('/detail/{id}', 'getDetail')->name('show');
 
 });
 
@@ -46,3 +40,8 @@ Route::get('banco/{n}', function (int $n){
     if($n <=0 ) return 'Sai định dạng';
     return view('banco', ['n'=> $n]);
 });
+
+
+//login
+Route::get('login', [ProductController::class,'login'])->name('login');
+Route::post('login', [ProductController::class, 'handleLogin'])->name('login.post');
