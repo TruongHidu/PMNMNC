@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\CheckTimeAccess;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class ProductController extends Controller
+class ProductController extends Controller implements HasMiddleware
 {
+    public static function middleware(){
+        return [
+            CheckTimeAccess::class
+        ];
+    }
     //
     public function index(){
         $title = "Product";
-        return view('product.index', ['title'=> $title, 
+        return view('product.index', ['title'=> $title,
     'products'=>[
         ['id'=>1, 'name'=>'IphoneX', 'price'=>200000],
         ['id'=>2, 'name'=>'Iphone12', 'price'=>200000],
@@ -27,26 +34,4 @@ class ProductController extends Controller
         dd($request->all());
     }
 
-    public function login(){
-        return view('login');
-    }
-    
-    public function handleLogin(Request $request){
-        $request->validate([
-            'email'=> 'required',
-            'password'=> 'required|min:6'
-        ],[
-            'email.required'=>'Vui lòng nhập emalil',
-            'password.required'=>'Vui lòng nhập mật khẩu',
-            'password.min'=>"Mật khẩu phải ít nhất 6 ký tự"
-        ]);
-
-        $email = $request->email;
-        $password = $request->password;
-        if($email=='truong@gmail.com'&& $password== '123456'){
-            return redirect('/')->with('success', 'Đăng nhập thành công!');
-        }
-        return back()-> with('error', 'Sai email hoặc mật khẩu!');
-
-    }
 }

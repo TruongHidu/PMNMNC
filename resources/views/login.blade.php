@@ -7,6 +7,11 @@
 </head>
 <body>
     <center><h1>Login</h1>
+    @if (session('success'))
+        <script>
+            alert("{{ session('success') }}");
+        </script>
+    @endif
     @if ($errors->any())
         <div style="color:red">
             @foreach ($errors->all() as $error)
@@ -33,6 +38,7 @@
     </div>
     <br>
     <button type="submit"> Login</button>
+    <a href="{{ route('signup') }}"> Sign Up</a>
 
 </form>
 </center>
