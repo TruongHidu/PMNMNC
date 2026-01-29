@@ -79,7 +79,7 @@
 <body>
 
 <div class="container">
-    <h2> {{ $title }} Management</h2>
+    <h2> Product Management</h2>
 
     <table>
         <thead>
@@ -87,6 +87,7 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Price</th>
+                <th>Stock</th>
                 <th>Detail</th>
             </tr>
         </thead>
@@ -96,6 +97,7 @@
                     <td>{{ $product['id'] }}</td>
                     <td>{{ $product['name'] }}</td>
                     <td>{{ $product['price'] }}</td>
+                    <td>{{ $product['stock'] }}</td>
                     <td><a href="{{ route('product.show', ['id' => $product['id']]) }}">Chi tiết</a></td>
                 </tr>
                 

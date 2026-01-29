@@ -59,4 +59,48 @@ class AuthController extends Controller
         return redirect(route('login'))->with('success', 'Đăng ký thành công');
         
     }
+
+    public function SignIn() {
+        return view('signin');
+    }
+    
+    public function CheckSignIn(Request $request) {
+
+        $request->validate([
+            'username'=> 'required',
+            'password'=> 'required|min:6',
+            'repass'=> 'required|same:password',
+            'mssv' => 'required',
+            'lopmonhoc' => 'required',
+            'gioitinh' => 'required',
+        ],[
+            'username.required'=>'Vui lòng nhập tên sinh viên',
+            'password.required'=>'Vui lòng điền mật khẩu',
+            'password.min'=>'Mật khẩu phải có ít nhất 6 ký tự',
+            'repass.required'=>'Vui lòng nhập lại mật khẩu',
+            'repass.same'=>'Mật khẩu không khớp',
+            'mssv.required'=>'Vui lòng nhập MSSV',
+            'lopmonhoc.required'=>'Vui lòng nhập lớp môn học',
+            'gioitinh.required'=>'Vui lòng chọn giới tính',
+        ]);
+    
+        $data = $request->all();
+    
+        if (
+            $data['username'] == 'TruongnvTruongnv' &&
+            $data['password'] == '123456' &&
+            $data['repass'] == '123456' &&
+            $data['mssv'] == '0093867' &&
+            $data['lopmonhoc'] == '67PM1' &&
+            $data['gioitinh'] == 'nam'
+        ) {
+            return redirect('/')->with('success', 'Đăng ký thành công');
+        }
+    
+        return back()->withErrors([
+            'signin' => 'Thông tin đăng ký không đúng'
+        ])->withInput();
+        
+    }
+    
 }

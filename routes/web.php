@@ -55,4 +55,9 @@ Route::get('sign-up',[AuthController::class,'signUp'])->name('signup');
 Route::post('sign-up',[AuthController::class, 'handleSignUp'])->name('signup.post');
 
 
+Route::get('signin', [AuthController::class,'SignIn']);
+Route::post('signin', [AuthController::class,'CheckSignIn'])->name('check.signin');
+
+
+
 Route::resource('test', TestController::class);

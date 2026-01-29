@@ -2,36 +2,65 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\CheckTimeAccess;
+use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
 
-class ProductController extends Controller implements HasMiddleware
+class ProductController extends Controller
 {
-    public static function middleware(){
-        return [
-            CheckTimeAccess::class
-        ];
-    }
-    //
-    public function index(){
-        $title = "Product";
-        return view('product.index', ['title'=> $title,
-    'products'=>[
-        ['id'=>1, 'name'=>'IphoneX', 'price'=>200000],
-        ['id'=>2, 'name'=>'Iphone12', 'price'=>200000],
-        ['id'=>3, 'name'=>'Iphone17', 'price'=>600000],
-    ],
-    ]);
-    }
-    public function getDetail($id='123'){
-        return view('product.detail',['id'=>$id]);
-    }
-    public function create(){
-        return view('product.add');
-    }
-    public function store(Request $request){
-        dd($request->all());
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $products = Product::all();
+        return view('product.index', ['products'=> $products]);
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
 }
