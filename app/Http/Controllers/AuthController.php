@@ -103,4 +103,23 @@ class AuthController extends Controller
         
     }
     
+    public function age(){
+        return view('age');
+    }
+    
+    public function saveAge(Request $request){
+        $request->validate([
+            'age' => 'required|integer'
+        ],[
+            'age.required' => 'Vui lòng nhập tuổi',
+            'age.integer' => 'Tuổi phải là số',
+           
+        ]);
+    
+        session(['age' => $request->age]);
+    
+         return redirect()->route('product.index');
+    }
+    
+    
 }

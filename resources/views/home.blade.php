@@ -13,7 +13,7 @@
             alert("{{ session('success') }}");
         </script>
     @endif
-        <a href="{{ route('product.index') }}">Product</a><br>
+        <a href="{{ route('age.form') }}">Product</a><br>
         <a href="{{ route('login') }}">Login</a>
     </center>
 </body>

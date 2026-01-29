@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TestController;
+use App\Http\Middleware\CheckAge;
 use App\Http\Middleware\CheckTimeAccess;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ Route::get('test', function () {
     return response()->json("Hello world");
 });
 
-Route::prefix('product')->name('product.')->controller(ProductController::class)->middleware(CheckTimeAccess::class)->group(function () {
+Route::prefix('product')->name('product.')->controller(ProductController::class)->middleware(CheckAge::class)->group(function () {
 
     Route::get('/', 'index')->name('index');
 
@@ -58,6 +59,9 @@ Route::post('sign-up',[AuthController::class, 'handleSignUp'])->name('signup.pos
 Route::get('signin', [AuthController::class,'SignIn']);
 Route::post('signin', [AuthController::class,'CheckSignIn'])->name('check.signin');
 
+
+Route::get('age', [AuthController::class, 'age'])->name('age.form');
+Route::post('age', [AuthController::class, 'saveAge'])->name('age.save');
 
 
 Route::resource('test', TestController::class);
