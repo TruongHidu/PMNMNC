@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TestController;
 use App\Http\Middleware\CheckAge;
@@ -16,17 +17,9 @@ Route::get('test', function () {
     return response()->json("Hello world");
 });
 
-Route::prefix('product')->name('product.')->controller(ProductController::class)->middleware(CheckAge::class)->group(function () {
+Route::resource('product', ProductController::class)
+    ->middleware(CheckAge::class);
 
-    Route::get('/', 'index')->name('index');
-
-    Route::get('/add', 'create')->name('create');
-
-    Route::post('/', 'store')->name('store');
-
-    Route::get('/detail/{id}', 'getDetail')->name('show');
-
-});
 
 
 Route::fallback(function (){
@@ -65,3 +58,19 @@ Route::post('age', [AuthController::class, 'saveAge'])->name('age.save');
 
 
 Route::resource('test', TestController::class);
+
+
+Route::get('/admin', function (){
+    return view('layout.admin');
+});
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(CheckAge::class)
+    ->group(function () {
+        Route::resource('product', ProductController::class);
+    });
+
+
+
+    //Category
+    Route::resource('category', CategoryController::class);
