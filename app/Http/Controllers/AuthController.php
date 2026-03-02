@@ -23,7 +23,7 @@ class AuthController extends Controller
         $email = $request->email;
         $password = $request->password;
         if($email=='truong@gmail.com'&& $password== '123456'){
-            return redirect('/')->with('success', 'Đăng nhập thành công!');
+            return redirect('/admin/product')->with('success', 'Đăng nhập thành công!');
         }
         return back()-> with('error', 'Sai email hoặc mật khẩu!');
 
@@ -87,7 +87,7 @@ class AuthController extends Controller
         $data = $request->all();
     
         if (
-            $data['username'] == 'TruongnvTruongnv' &&
+            $data['username'] == 'Truongnv' &&
             $data['password'] == '123456' &&
             $data['repass'] == '123456' &&
             $data['mssv'] == '0093867' &&

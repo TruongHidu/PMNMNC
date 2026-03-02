@@ -4,7 +4,7 @@
 <div class="container">
     <h1>Thêm danh mục mới</h1>
 
-    <form action="{{ route('category.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.category.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="mb-3">
@@ -46,7 +46,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Lưu lại</button>
-        <a href="{{ route('category.index') }}" class="btn btn-secondary">Quay lại</a>
+        <a href="{{ route('admin.category.index') }}" class="btn btn-secondary">Quay lại</a>
     </form>
 </div>
 @endsection 

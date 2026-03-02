@@ -13,8 +13,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::where('is_delete', 0)->get();
-        return view('admin.category.index', ['categories'=> $categories]);
+        $categories = Category::with('parent')
+                    ->where('is_delete', 0)
+                    ->get();
+
+        return view('admin.category.index', compact('categories'));
     }
 
     /**
@@ -47,7 +50,7 @@ class CategoryController extends Controller
             $data['image'] = $path;
         }
         Category::create($data);
-        return redirect()->route('category.index')->with('success', 'Thêm mới thành công!');
+        return redirect()->route('admin.category.index')->with('success', 'Thêm mới thành công!');
     }
 
     /**
@@ -109,7 +112,7 @@ class CategoryController extends Controller
 
     $category->update($data);
 
-    return redirect()->route('category.index')
+    return redirect()->route('admin.category.index')
                      ->with('success', 'Cập nhật danh mục thành công');
 }
 

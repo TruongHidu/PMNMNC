@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
-    return view('home');
-})->name('home');
+    return view('login  ');
+})->name('login');
 
 Route::get('test', function () {
     return response()->json("Hello world");
 });
 
-Route::resource('product', ProductController::class)
-    ->middleware(CheckAge::class);
+Route::resource('product', ProductController::class);
+    // ->middleware(CheckAge::class);
 
 
 
@@ -65,12 +65,10 @@ Route::get('/admin', function (){
 });
 Route::prefix('admin')
     ->name('admin.')
-    ->middleware(CheckAge::class)
     ->group(function () {
         Route::resource('product', ProductController::class);
+        Route::resource('category', CategoryController::class);
     });
 
 
 
-    //Category
-    Route::resource('category', CategoryController::class);

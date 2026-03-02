@@ -17,6 +17,7 @@
                       <th>Thuộc danh mục</th>
                       <th style="width: 40px">Image</th>
                       <th style="width: 40px">Trạng thái </th>
+                      
 
                     </tr>
                   </thead>
@@ -37,9 +38,20 @@
                             No image
                         @endif
                       </td>
-                      <td>{{ $c->is_active ? 'Hiển thị' : 'Ẩn' }}</td>
+                      <td>{{ $c->is_active ? 'Hoạt động' : 'Ẩn' }}</td>
                       <td>
-                        <a href="{{ route('category.edit', $c) }}">Sửa</a>
+                        <a href="{{ route('admin.category.edit', $c) }}">Sửa</a>
+                      </td>
+                      <td>
+                        <form action="{{ route('admin.category.destroy', $c) }}" 
+                              method="POST" 
+                              onsubmit="return confirm('Bạn có chắc muốn ẩn danh mục này?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                Ẩn
+                            </button>
+                        </form>
                       </td>
                     </tr>
                     @endforeach
@@ -58,7 +70,7 @@
               </div>
             </div>
 
-            <a href="{{ route('category.create') }}" class="btn-create">
+            <a href="{{ route('admin.category.create') }}" class="btn-create">
         Add New Category
     </a>
 @endsection

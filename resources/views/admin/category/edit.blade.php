@@ -3,7 +3,7 @@
 <div class="container">
     <h1>Chỉnh sửa danh mục</h1>
 
-    <form action="{{ route('category.update', $category) }}"
+    <form action="{{ route('admin.category.update', $category) }}"
           method="POST"
           enctype="multipart/form-data">
         @csrf
@@ -72,7 +72,7 @@
         </div>
 
         <button class="btn btn-primary">Cập nhật</button>
-        <a href="{{ route('category.index') }}" class="btn btn-secondary">Quay lại</a>
+        <a href="{{ route('admin.category.index') }}" class="btn btn-secondary">Quay lại</a>
     </form>
 </div>
 
