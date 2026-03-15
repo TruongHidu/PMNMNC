@@ -3,88 +3,133 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Danh sách sản phẩm
      */
     public function index()
     {
-        $products = Product::all();
-        return view('admin.product.index', ['products'=> $products]);
+        $products = Product::with('category')
+                    ->where('is_delete', 0)
+                    ->paginate(10);
+
+        return view('admin.product.index', compact('products'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Form thêm
      */
     public function create()
     {
-        return view ('admin.product.add');
+        $categories = Category::where('is_delete', 0)->get();
+        return view('admin.product.add', compact('categories'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Lưu sản phẩm
      */
     public function store(Request $request)
-    {   
-        $request->validate([
-            'name' => 'required',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-        ]);
-
-        $product = new Product();
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
-
-        $product->save();
-        return redirect('adminadmin/product');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        
-        $product = Product::find($id);
-        return view('admin.product.edit', compact('product'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        $product = Product::findOrFail($id);
-        return view('admin.product.edit', compact('product'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
+            'name'        => 'required',
+            'price'       => 'required|numeric|min:0',
+            'sale_price'  => 'nullable|numeric|min:0',
+            'stock'       => 'required|integer|min:0',
+            'category_id' => 'nullable|exists:categories,id',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $product = Product::findOrFail($id);
-        $product->update($request->all());
+        $data = $request->only([
+            'name',
+            'price',
+            'sale_price',
+            'stock',
+            'category_id',
+        ]);
 
-        return redirect()->route('admin.product.index');
+        $data['is_active'] = $request->has('is_active') ? 1 : 0;
+        $data['is_delete'] = 0;
+
+        // Upload ảnh
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $data['image'] = $path;
+        }
+
+        Product::create($data);
+
+        return redirect()->route('product.index')
+                         ->with('success', 'Thêm sản phẩm thành công');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Form sửa
      */
-    public function destroy(string $id)
+    public function edit($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $categories = Category::where('is_delete', 0)->get();
+
+        return view('admin.product.edit', compact('product', 'categories'));
+    }
+
+    /**
+     * Cập nhật
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name'        => 'required',
+            'price'       => 'required|numeric|min:0',
+            'sale_price'  => 'nullable|numeric|min:0',
+            'stock'       => 'required|integer|min:0',
+            'category_id' => 'nullable|exists:categories,id',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $product = Product::findOrFail($id);
+
+        $data = $request->only([
+            'name',
+            'price',
+            'sale_price',
+            'stock',
+            'category_id',
+        ]);
+
+        $data['is_active'] = $request->has('is_active') ? 1 : 0;
+
+        // Nếu upload ảnh mới
+        if ($request->hasFile('image')) {
+
+            // Xóa ảnh cũ
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+
+            $path = $request->file('image')->store('products', 'public');
+            $data['image'] = $path;
+        }
+
+        $product->update($data);
+
+        return redirect()->route('product.index')
+                         ->with('success', 'Cập nhật thành công');
+    }
+
+    /**
+     * Xóa mềm
+     */
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->update(['is_delete' => 1]);
+
+        return back()->with('success', 'Đã xóa sản phẩm');
     }
 }

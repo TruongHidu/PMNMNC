@@ -10,8 +10,21 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
+        'category_id',
         'name',
+        'sku',
         'price',
-        'stock'
+        'sale_price',
+        'stock',
+        'description',
+        'image',
+        'is_active',
+        'is_delete'
     ];
+
+    // Quan hệ với Category
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
